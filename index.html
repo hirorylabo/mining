@@ -10,9 +10,12 @@
     ></script>
   </head>
   <body>
-    <button id="run-button">Generate Ethereum Address</button>
+    <label for="num-addresses">Number of Addresses to Generate:</label>
+    <input type="number" id="num-addresses" value="10" min="1" />
+    <button id="run-button">Generate Ethereum Addresses</button>
+    <span id="elapsed-time"></span>
+    <!-- ボタンの右隣に配置 -->
     <div id="result-container"></div>
-    <div id="elapsed-time"></div>
     <script>
       async function generateEthAddress(index) {
         const ethersProvider = new ethers.providers.EtherscanProvider();
@@ -46,7 +49,9 @@
         .addEventListener("click", async () => {
           const startTime = Date.now();
 
-          const numAddresses = 10; // 生成するアドレスの数を指定
+          const numAddresses = parseInt(
+            document.getElementById("num-addresses").value
+          ); // テキストボックスからアドレスの数を取得
           for (let i = 0; i < numAddresses; i++) {
             await generateEthAddress(i + 1);
           }
@@ -54,74 +59,11 @@
           const endTime = Date.now();
           const elapsedTime = endTime - startTime;
 
-          const elapsedTimeDiv = document.getElementById("elapsed-time");
-          elapsedTimeDiv.innerText = `Elapsed Time: ${Math.floor(
+          const elapsedTimeSpan = document.getElementById("elapsed-time");
+          elapsedTimeSpan.innerText = `Elapsed Time: ${Math.floor(
             elapsedTime / 60000
           )}:${((elapsedTime % 60000) / 1000).toFixed(3)}`;
         });
     </script>
   </body>
 </html>
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ethereum Address Generator</title>
-    <script
-      src="https://cdn.ethers.io/lib/ethers-5.0.umd.min.js"
-      type="application/javascript"
-    ></script>
-  </head>
-  <body>
-    <button id="run-button">Generate Ethereum Address</button>
-    <div id="result-container"></div>
-    <div id="time-taken"></div>
-    <script>
-      async function generateEthAddress(index) {
-        const ethersProvider = new ethers.providers.EtherscanProvider();
-        const wallet = ethers.Wallet.createRandom();
-        const address = wallet.address;
-        const mnemonic = wallet.mnemonic.phrase;
-        const privateKey = wallet.privateKey;
-
-        const balance = await ethersProvider.getBalance(address);
-        const ethBalance = ethers.utils.formatEther(balance);
-
-        const resultContainer = document.getElementById("result-container");
-
-        const div = document.createElement("div");
-        div.innerText = `
-          ${index}: 
-          Address: ${address}
-          Mnemonic: ${mnemonic}
-          Private Key: ${privateKey}
-          Balance: ${ethBalance} ETH
-        `;
-        resultContainer.insertBefore(div, resultContainer.firstChild);
-
-        if (parseFloat(ethBalance) > 0) {
-          alert(`Address ${address} has a balance of ${ethBalance} ETH!`);
-        }
-      }
-
-      document
-        .getElementById("run-button")
-        .addEventListener("click", async () => {
-          const numAddresses = 100; // 生成するアドレスの数を指定
-          const start = performance.now();
-
-          for (let i = 0; i < numAddresses; i++) {
-            await generateEthAddress(i + 1);
-          }
-
-          const end = performance.now();
-          const timeTaken = (end - start) / 1000;
-
-          const timeTakenContainer = document.getElementById("time-taken");
-          timeTakenContainer.innerText = `処理にかかった時間: ${timeTaken} 秒`;
-        });
-    </script>
-  </body>
-</html> -->
