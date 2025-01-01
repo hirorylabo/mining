@@ -1,0 +1,7 @@
+aiohttp
+aiosmtplib
+web3
+tenacity
+google-api-python-client
+websockets
+psutil
